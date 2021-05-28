@@ -10,6 +10,46 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 2021_05_28_161833) do
+
+  create_table "bets", force: :cascade do |t|
+    t.string "team_bet"
+    t.string "favorite_or_underdog"
+    t.string "opposing_team"
+    t.string "win_loss"
+    t.float "odds"
+    t.float "wager"
+    t.integer "owner_id"
+    t.float "money_won_lost"
+    t.integer "team_id_bet"
+    t.integer "opposing_team_id"
+    t.integer "likes_count"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "football_teams", force: :cascade do |t|
+    t.string "team_name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "likes", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "bet_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "email"
+    t.string "password_digest"
+    t.string "favorite_team"
+    t.float "default_bet"
+    t.float "total_balance"
+    t.integer "bets_count"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
 end

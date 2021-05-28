@@ -1,0 +1,221 @@
+<div>
+  <div>
+    <h1>
+      Bet #<%= @the_bet.id %> details
+    </h1>
+
+    <div>
+      <div>
+        <a href="/bets">
+          Go back
+        </a>
+      </div>
+
+      <div>
+        <a href="/delete_bet/<%= @the_bet.id %>">
+          Delete bet
+        </a>
+      </div>
+    </div>
+
+    <dl>
+      <dt>
+        Team bet
+      </dt>
+      <dd>
+        <%= @the_bet.team_bet %>
+      </dd>
+
+      <dt>
+        Favorite or underdog
+      </dt>
+      <dd>
+        <%= @the_bet.favorite_or_underdog %>
+      </dd>
+
+      <dt>
+        Opposing team
+      </dt>
+      <dd>
+        <%= @the_bet.opposing_team %>
+      </dd>
+
+      <dt>
+        Win loss
+      </dt>
+      <dd>
+        <%= @the_bet.win_loss %>
+      </dd>
+
+      <dt>
+        Odds
+      </dt>
+      <dd>
+        <%= @the_bet.odds %>
+      </dd>
+
+      <dt>
+        Wager
+      </dt>
+      <dd>
+        <%= @the_bet.wager %>
+      </dd>
+
+      <dt>
+        Owner
+      </dt>
+      <dd>
+        <%= @the_bet.owner_id %>
+      </dd>
+
+      <dt>
+        Money won lost
+      </dt>
+      <dd>
+        <%= @the_bet.money_won_lost %>
+      </dd>
+
+      <dt>
+        Team id bet
+      </dt>
+      <dd>
+        <%= @the_bet.team_id_bet %>
+      </dd>
+
+      <dt>
+        Opposing team
+      </dt>
+      <dd>
+        <%= @the_bet.opposing_team_id %>
+      </dd>
+
+      <dt>
+        Likes count
+      </dt>
+      <dd>
+        <%= @the_bet.likes_count %>
+      </dd>
+
+      <dt>
+        Created at
+      </dt>
+      <dd>
+        <%= time_ago_in_words(@the_bet.created_at) %> ago
+      </dd>
+
+      <dt>
+        Updated at
+      </dt>
+      <dd>
+        <%= time_ago_in_words(@the_bet.updated_at) %> ago
+      </dd>
+    </dl>
+  </div>
+</div>
+
+<hr>
+
+
+<div>
+  <div>
+    <h2>
+      Edit bet
+    </h2>
+
+    <form action="/modify_bet/<%= @the_bet.id %>"  method="post" >
+      <div>
+        <label for="team_bet_box">
+          Team bet
+        </label>
+
+        <input type="text" id="team_bet_box" name="query_team_bet" value="<%= @the_bet.team_bet %>">
+      </div>
+
+      <div>
+        <label for="favorite_or_underdog_box">
+          Favorite or underdog
+        </label>
+
+        <input type="text" id="favorite_or_underdog_box" name="query_favorite_or_underdog" value="<%= @the_bet.favorite_or_underdog %>">
+      </div>
+
+      <div>
+        <label for="opposing_team_box">
+          Opposing team
+        </label>
+
+        <input type="text" id="opposing_team_box" name="query_opposing_team" value="<%= @the_bet.opposing_team %>">
+      </div>
+
+      <div>
+        <label for="win_loss_box">
+          Win loss
+        </label>
+
+        <input type="text" id="win_loss_box" name="query_win_loss" value="<%= @the_bet.win_loss %>">
+      </div>
+
+      <div>
+        <label for="odds_box">
+          Odds
+        </label>
+
+        <input type="text" id="odds_box" name="query_odds" value="<%= @the_bet.odds %>">
+      </div>
+
+      <div>
+        <label for="wager_box">
+          Wager
+        </label>
+
+        <input type="text" id="wager_box" name="query_wager" value="<%= @the_bet.wager %>">
+      </div>
+
+      <div>
+        <label for="owner_id_box">
+          Owner
+        </label>
+
+        <input type="text" id="owner_id_box" name="query_owner_id" value="<%= @the_bet.owner_id %>">
+      </div>
+
+      <div>
+        <label for="money_won_lost_box">
+          Money won lost
+        </label>
+
+        <input type="text" id="money_won_lost_box" name="query_money_won_lost" value="<%= @the_bet.money_won_lost %>">
+      </div>
+
+      <div>
+        <label for="team_id_bet_box">
+          Team id bet
+        </label>
+
+        <input type="text" id="team_id_bet_box" name="query_team_id_bet" value="<%= @the_bet.team_id_bet %>">
+      </div>
+
+      <div>
+        <label for="opposing_team_id_box">
+          Opposing team
+        </label>
+
+        <input type="text" id="opposing_team_id_box" name="query_opposing_team_id" value="<%= @the_bet.opposing_team_id %>">
+      </div>
+
+      <div>
+        <label for="likes_count_box">
+          Likes count
+        </label>
+
+        <input type="text" id="likes_count_box" name="query_likes_count" value="<%= @the_bet.likes_count %>">
+      </div>
+
+      <button>
+        Update bet
+      </button>
+    </form>
+  </div>
+</div>
+
+<hr>

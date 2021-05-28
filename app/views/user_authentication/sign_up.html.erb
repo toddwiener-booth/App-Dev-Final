@@ -1,0 +1,60 @@
+<h1>Sign up</h1>
+
+<form action="/insert_user" method="post">
+
+  <div>
+    <label for="email_box">Email</label>
+    <input id="email_box" name="query_email" placeholder="Choose a email..." type="text">
+  </div>
+                 
+  <div>
+    <label for="query_favorite_team">Favorite team</label>
+
+    <select name="query_favorite_team" id="query_favorite_team">
+
+    <% @list_of_teams.each do |team| %>
+      <option value="<%= team.team_name %>">
+          <%= team.team_name %>
+      </option>
+    <% end %>
+    </select>
+  </div>
+         
+  <div>
+    <label for="default_bet_box">Default bet</label>
+      
+    <input type="text" id="default_bet_box" name="query_default_bet">
+  </div>
+         
+  <!--<div>
+    <label for="total_balance_box">Total balance</label>
+      
+    <input type="text" id="total_balance_box" name="query_total_balance">
+  </div>-->
+         
+  <!--<div>
+    <label for="bets_count_box">Bets count</label>
+      
+    <input type="text" id="bets_count_box" name="query_bets_count">
+  </div>-->
+    
+  <div>
+    <label for="password_box">Password</label>
+    <input id="password_box" name="query_password" placeholder="Choose a password..." type="password">
+  </div>
+
+  <div>
+    <label for="password_confirmation_box">Password Confirmation</label>
+    <input id="password_confirmation_box" name="query_password_confirmation" placeholder="Confirm your password..." type="password">
+  </div>
+
+  <button>
+    Sign up
+  </button>
+</form>
+
+<hr>
+
+<p>
+  Or, <a href="/user_sign_in">Sign in</a> instead.
+</p>

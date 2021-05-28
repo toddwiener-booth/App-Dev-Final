@@ -1,0 +1,71 @@
+<div>
+  <div>
+    <h1>
+      Football team #<%= @the_football_team.id %> details
+    </h1>
+
+    <div>
+      <div>
+        <a href="/football_teams">
+          Go back
+        </a>
+      </div>
+
+      <div>
+        <a href="/delete_football_team/<%= @the_football_team.id %>">
+          Delete football team
+        </a>
+      </div>
+    </div>
+
+    <dl>
+      <dt>
+        Team name
+      </dt>
+      <dd>
+        <%= @the_football_team.team_name %>
+      </dd>
+
+      <dt>
+        Created at
+      </dt>
+      <dd>
+        <%= time_ago_in_words(@the_football_team.created_at) %> ago
+      </dd>
+
+      <dt>
+        Updated at
+      </dt>
+      <dd>
+        <%= time_ago_in_words(@the_football_team.updated_at) %> ago
+      </dd>
+    </dl>
+  </div>
+</div>
+
+<hr>
+
+
+<div>
+  <div>
+    <h2>
+      Edit football team
+    </h2>
+
+    <form action="/modify_football_team/<%= @the_football_team.id %>"  method="post" >
+      <div>
+        <label for="team_name_box">
+          Team name
+        </label>
+
+        <input type="text" id="team_name_box" name="query_team_name" value="<%= @the_football_team.team_name %>">
+      </div>
+
+      <button>
+        Update football team
+      </button>
+    </form>
+  </div>
+</div>
+
+<hr>

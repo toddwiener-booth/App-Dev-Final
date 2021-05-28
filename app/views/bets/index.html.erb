@@ -1,0 +1,266 @@
+<div>
+  <div>
+    <h1>
+      List of all bets
+    </h1>
+  </div>
+</div>
+
+<hr>
+
+<div>
+  <div>
+    <h2>
+      Add a new bet
+    </h2>
+
+    <form action="/insert_bet" method="post">
+      <!--<div>
+        <label for="team_bet_box">
+          Team bet
+        </label>
+
+        <input type="text" id="team_bet_box" name="query_team_bet">
+      </div>-->
+
+        <label for="team_bet">Team bet</label>
+        <select name="query_team_id" id="football_team_id">
+
+        <% @list_of_teams.each do |team| %>
+          <% if team.team_name == @user.favorite_team %>
+          <option value="<%= team.id %>" selected>
+              <%= team.team_name %>
+          </option>
+          <% end %>
+          <% if team.team_name != @user.favorite_team %>
+          <option value="<%= team.id %>">
+              <%= team.team_name %>
+          </option>
+          <% end %>
+        <% end %>
+        </select>
+
+      <div>
+        <label for="favorite_or_underdog_box">
+          Favorite or underdog
+        </label>
+
+        <input type="text" id="favorite_or_underdog_box" name="query_favorite_or_underdog">
+      </div>
+
+
+        <label for="opposing_team_box">Opposing team</label>
+        <select name="query_opposing_team" id="query_opposing_team">
+
+        <% @list_of_teams.each do |team| %>
+          <option value="<%= team.id %>">
+              <%= team.team_name %>
+          </option>
+        <% end %>
+        </select>
+
+      <div>
+        <label for="win_loss_box">
+          Win loss
+        </label>
+
+        <input type="text" id="win_loss_box" name="query_win_loss">
+      </div>
+
+      <div>
+        <label for="odds_box">
+          Odds
+        </label>
+
+        <input type="text" id="odds_box" name="query_odds">
+      </div>
+
+      <div>
+        <label for="wager_box">
+          Wager
+        </label>
+
+        <input type="text" id="wager_box" name="query_wager">
+      </div>
+
+      <div>
+        <label for="owner_id_box">
+          Owner
+        </label>
+
+        <input type="text" id="owner_id_box" name="query_owner_id">
+      </div>
+
+      <div>
+        <label for="money_won_lost_box">
+          Money won lost
+        </label>
+
+        <input type="text" id="money_won_lost_box" name="query_money_won_lost">
+      </div>
+
+      <div>
+        <label for="team_id_bet_box">
+          Team id bet
+        </label>
+
+        <input type="text" id="team_id_bet_box" name="query_team_id_bet">
+      </div>
+
+      <div>
+        <label for="opposing_team_id_box">
+          Opposing team
+        </label>
+
+        <input type="text" id="opposing_team_id_box" name="query_opposing_team_id">
+      </div>
+
+      <div>
+        <label for="likes_count_box">
+          Likes count
+        </label>
+
+        <input type="text" id="likes_count_box" name="query_likes_count">
+      </div>
+
+      <button>
+        Create bet
+      </button>
+    </form>
+  </div>
+</div>
+
+<hr>
+<div>
+  <div>
+    <table>
+      <tr>
+        <th>
+          ID
+        </th>
+
+        <th>
+          Team bet
+        </th>
+
+        <th>
+          Favorite or underdog
+        </th>
+
+        <th>
+          Opposing team
+        </th>
+
+        <th>
+          Win loss
+        </th>
+
+        <th>
+          Odds
+        </th>
+
+        <th>
+          Wager
+        </th>
+
+        <th>
+          Owner
+        </th>
+
+        <th>
+          Money won lost
+        </th>
+
+        <th>
+          Team id bet
+        </th>
+
+        <th>
+          Opposing team
+        </th>
+
+        <th>
+          Likes count
+        </th>
+
+        <th>
+          Created at
+        </th>
+
+        <th>
+          Updated at
+        </th>
+
+        <th>
+        </th>
+      </tr>
+
+      <% @list_of_bets.each do |a_bet| %>
+      <tr>
+        <td>
+          <%= a_bet.id %>
+        </td>
+
+        <td>
+          <%= a_bet.team_bet %>
+        </td>
+
+        <td>
+          <%= a_bet.favorite_or_underdog %>
+        </td>
+
+        <td>
+          <%= a_bet.opposing_team %>
+        </td>
+
+        <td>
+          <%= a_bet.win_loss %>
+        </td>
+
+        <td>
+          <%= a_bet.odds %>
+        </td>
+
+        <td>
+          <%= a_bet.wager %>
+        </td>
+
+        <td>
+          <%= a_bet.owner_id %>
+        </td>
+
+        <td>
+          <%= a_bet.money_won_lost %>
+        </td>
+
+        <td>
+          <%= a_bet.team_id_bet %>
+        </td>
+
+        <td>
+          <%= a_bet.opposing_team_id %>
+        </td>
+
+        <td>
+          <%= a_bet.likes_count %>
+        </td>
+
+        <td>
+          <%= time_ago_in_words(a_bet.created_at) %> ago
+        </td>
+        <td>
+          <%= time_ago_in_words(a_bet.updated_at) %> ago
+        </td>
+
+        <td>
+          <a href="/bets/<%= a_bet.id %>">
+            Show details
+          </a>
+        </td>
+      </tr>
+      <% end %>
+    </table>
+  </div>
+</div>
+
+<hr>

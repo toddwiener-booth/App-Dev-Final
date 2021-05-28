@@ -1,0 +1,86 @@
+<div>
+  <div>
+    <h1>
+      List of all football teams
+    </h1>
+  </div>
+</div>
+
+<hr>
+
+<div>
+  <div>
+    <h2>
+      Add a new football team
+    </h2>
+
+    <form action="/insert_football_team" method="post">
+      <div>
+        <label for="team_name_box">
+          Team name
+        </label>
+
+        <input type="text" id="team_name_box" name="query_team_name">
+      </div>
+
+      <button>
+        Create football team
+      </button>
+    </form>
+  </div>
+</div>
+
+<hr>
+<div>
+  <div>
+    <table>
+      <tr>
+        <th>
+          ID
+        </th>
+
+        <th>
+          Team name
+        </th>
+
+        <th>
+          Created at
+        </th>
+
+        <th>
+          Updated at
+        </th>
+
+        <th>
+        </th>
+      </tr>
+
+      <% @list_of_football_teams.each do |a_football_team| %>
+      <tr>
+        <td>
+          <%= a_football_team.id %>
+        </td>
+
+        <td>
+          <%= a_football_team.team_name %>
+        </td>
+
+        <td>
+          <%= time_ago_in_words(a_football_team.created_at) %> ago
+        </td>
+        <td>
+          <%= time_ago_in_words(a_football_team.updated_at) %> ago
+        </td>
+
+        <td>
+          <a href="/football_teams/<%= a_football_team.id %>">
+            Show details
+          </a>
+        </td>
+      </tr>
+      <% end %>
+    </table>
+  </div>
+</div>
+
+<hr>

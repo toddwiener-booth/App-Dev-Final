@@ -1,0 +1,87 @@
+class BetsController < ApplicationController
+  def homepage
+
+
+
+    render({ :template => "bets/homepage.html.erb"})
+  end
+  
+  def index
+    matching_bets = Bet.all
+
+    @list_of_bets = matching_bets.order({ :created_at => :desc })
+
+    all_teams = FootballTeam.all
+
+    @list_of_teams = all_teams.order({ :team_name => :asc })
+
+    @user = User.where({ :id => session[:user_id] }).first
+
+    render({ :template => "bets/index.html.erb" })
+  end
+
+  def show
+    the_id = params.fetch("path_id")
+
+    matching_bets = Bet.where({ :id => the_id })
+
+    @the_bet = matching_bets.at(0)
+
+    render({ :template => "bets/show.html.erb" })
+  end
+
+  def create
+    the_bet = Bet.new
+    the_bet.team_bet = params.fetch("query_team_bet")
+    the_bet.favorite_or_underdog = params.fetch("query_favorite_or_underdog")
+    the_bet.opposing_team = params.fetch("query_opposing_team")
+    the_bet.win_loss = params.fetch("query_win_loss")
+    the_bet.odds = params.fetch("query_odds")
+    the_bet.wager = params.fetch("query_wager")
+    the_bet.owner_id = params.fetch("query_owner_id")
+    the_bet.money_won_lost = params.fetch("query_money_won_lost")
+    the_bet.team_id_bet = params.fetch("query_team_id_bet")
+    the_bet.opposing_team_id = params.fetch("query_opposing_team_id")
+    the_bet.likes_count = params.fetch("query_likes_count")
+
+    if the_bet.valid?
+      the_bet.save
+      redirect_to("/bets", { :notice => "Bet created successfully." })
+    else
+      redirect_to("/bets", { :notice => "Bet failed to create successfully." })
+    end
+  end
+
+  def update
+    the_id = params.fetch("path_id")
+    the_bet = Bet.where({ :id => the_id }).at(0)
+
+    the_bet.team_bet = params.fetch("query_team_bet")
+    the_bet.favorite_or_underdog = params.fetch("query_favorite_or_underdog")
+    the_bet.opposing_team = params.fetch("query_opposing_team")
+    the_bet.win_loss = params.fetch("query_win_loss")
+    the_bet.odds = params.fetch("query_odds")
+    the_bet.wager = params.fetch("query_wager")
+    the_bet.owner_id = params.fetch("query_owner_id")
+    the_bet.money_won_lost = params.fetch("query_money_won_lost")
+    the_bet.team_id_bet = params.fetch("query_team_id_bet")
+    the_bet.opposing_team_id = params.fetch("query_opposing_team_id")
+    the_bet.likes_count = params.fetch("query_likes_count")
+
+    if the_bet.valid?
+      the_bet.save
+      redirect_to("/bets/#{the_bet.id}", { :notice => "Bet updated successfully."} )
+    else
+      redirect_to("/bets/#{the_bet.id}", { :alert => "Bet failed to update successfully." })
+    end
+  end
+
+  def destroy
+    the_id = params.fetch("path_id")
+    the_bet = Bet.where({ :id => the_id }).at(0)
+
+    the_bet.destroy
+
+    redirect_to("/bets", { :notice => "Bet deleted successfully."} )
+  end
+end

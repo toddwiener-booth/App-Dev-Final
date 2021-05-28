@@ -1,0 +1,51 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      Bet with Friends!
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsible-nav-links" aria-controls="collapsible-nav-links" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="collapsible-nav-links">
+      <ul class="navbar-nav mr-auto">
+        <% if session[:user_id] == nil %>
+        <li class="nav-item">
+          <a class="nav-link" href="/user_sign_up">
+            Sign Up
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/user_sign_in">
+            Sign In
+          </a>
+        </li>
+        <% end %>
+        <% if session[:user_id] != nil %>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Resources
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a href="/likes" class="dropdown-item">
+              Likes
+            </a>
+            <a href="/bets" class="dropdown-item">
+              Bets
+            </a>
+            <a href="/edit_user_profile" class="dropdown-item">
+              Edit User Profile
+            </a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/user_sign_out">
+            Log Out
+          </a>
+        </li>
+        <% end %>
+      </ul>
+    </div> <!-- .navbar-collapse -->
+  </div> <!-- .container -->
+</nav>

@@ -1,0 +1,66 @@
+<div >
+  <h5>
+    Edit User Account
+  </h5>
+
+  <% if @user.errors.any? %>
+  <% @user.errors.full_messages.each do |message| %>
+    <div class="alert">
+      <%= message %>
+    </div>
+  <% end %>
+  <% end %>
+  <div>
+    <form action="/modify_user" method="post">
+              
+      <div>
+        <label for="email_box">Email</label>
+          
+        <input id="email_box" name="query_email" value="<%= @current_user.email %>">
+          
+      </div>
+                                    
+      <div>
+        <label for="favorite_team_box">Favorite team</label>
+          
+        <input id="favorite_team_box" name="query_favorite_team" value="<%= @current_user.favorite_team %>">
+          
+      </div>
+                      
+      <div>
+        <label for="default_bet_box">Default bet</label>
+          
+        <input id="default_bet_box" name="query_default_bet" value="<%= @current_user.default_bet %>">
+          
+      </div>
+                      
+      <div>
+        <label for="total_balance_box">Total balance</label>
+          
+        <input id="total_balance_box" name="query_total_balance" value="<%= @current_user.total_balance %>">
+          
+      </div>
+                      
+      <div>
+        <label for="bets_count_box">Bets count</label>
+          
+        <input id="bets_count_box" name="query_bets_count" value="<%= @current_user.bets_count %>">
+          
+      </div>
+              
+      <div>
+        <label for="password_box">Password</label>
+        <input id="password_box" name="query_password" placeholder="Choose a new password..." type="password">
+      </div>
+    
+      <div>
+        <label for="password_confirmation_box">Password Confirmation</label>
+        <input id="password_confirmation_box" name="query_password_confirmation" placeholder="Confirm your new password..." type="password">
+      </div>
+
+      <button>
+        Update account
+      </button>
+    </form>
+  </div>
+</div>
