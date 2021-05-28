@@ -24,16 +24,16 @@
       </div>-->
 
         <label for="team_bet">Team bet</label>
-        <select name="query_team_id" id="football_team_id">
+        <select name="query_team_bet" id="query_team_bet">
 
         <% @list_of_teams.each do |team| %>
           <% if team.team_name == @user.favorite_team %>
-          <option value="<%= team.id %>" selected>
+          <option value="<%= team.team_name %>" selected>
               <%= team.team_name %>
           </option>
           <% end %>
           <% if team.team_name != @user.favorite_team %>
-          <option value="<%= team.id %>">
+          <option value="<%= team.team_name %>">
               <%= team.team_name %>
           </option>
           <% end %>
@@ -42,38 +42,31 @@
 
       <div>
         <label for="favorite_or_underdog_box">
-          Favorite or underdog
+          Odds
         </label>
 
-        <input type="text" id="favorite_or_underdog_box" name="query_favorite_or_underdog">
-      </div>
 
+        <select name="query_favorite_or_underdog" id="query_favorite_or_underdog">
+          <option value="Favorite">
+              -
+          </option>
+          <option value="Underdog">
+              +
+          </option>
+        </select>
+
+        <input type="text" id="odds_box" name="query_odds">
+      </div>
 
         <label for="opposing_team_box">Opposing team</label>
         <select name="query_opposing_team" id="query_opposing_team">
 
         <% @list_of_teams.each do |team| %>
-          <option value="<%= team.id %>">
+          <option value="<%= team.team_name %>">
               <%= team.team_name %>
           </option>
         <% end %>
         </select>
-
-      <div>
-        <label for="win_loss_box">
-          Win loss
-        </label>
-
-        <input type="text" id="win_loss_box" name="query_win_loss">
-      </div>
-
-      <div>
-        <label for="odds_box">
-          Odds
-        </label>
-
-        <input type="text" id="odds_box" name="query_odds">
-      </div>
 
       <div>
         <label for="wager_box">
@@ -84,44 +77,63 @@
       </div>
 
       <div>
+        <label for="win_loss_box">
+          Bet Won/Lost/Pending
+        </label>
+
+        <select name="query_win_loss" id="query_win_loss">
+          <option value="Win">
+              Win
+          </option>
+          <option value="Loss">
+              Loss
+          </option>
+          <option value="Pending" selected>
+              Pending
+          </option>
+        </select>
+
+      </div>
+
+      <!--<div>
         <label for="owner_id_box">
           Owner
         </label>
 
         <input type="text" id="owner_id_box" name="query_owner_id">
-      </div>
+      </div>-->
 
-      <div>
+      <!--<div>
         <label for="money_won_lost_box">
           Money won lost
         </label>
 
         <input type="text" id="money_won_lost_box" name="query_money_won_lost">
-      </div>
+      </div>-->
 
-      <div>
+      <!--<div>
         <label for="team_id_bet_box">
           Team id bet
         </label>
 
         <input type="text" id="team_id_bet_box" name="query_team_id_bet">
-      </div>
+      </div>-->
 
-      <div>
+      <!--<div>
         <label for="opposing_team_id_box">
           Opposing team
         </label>
 
         <input type="text" id="opposing_team_id_box" name="query_opposing_team_id">
-      </div>
+      </div>-->
 
-      <div>
+      <!--<div>
         <label for="likes_count_box">
           Likes count
         </label>
 
         <input type="text" id="likes_count_box" name="query_likes_count">
-      </div>
+      </div>-->
 
       <button>
         Create bet

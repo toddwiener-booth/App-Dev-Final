@@ -38,14 +38,41 @@ class BetsController < ApplicationController
     the_bet.win_loss = params.fetch("query_win_loss")
     the_bet.odds = params.fetch("query_odds")
     the_bet.wager = params.fetch("query_wager")
-    the_bet.owner_id = params.fetch("query_owner_id")
-    the_bet.money_won_lost = params.fetch("query_money_won_lost")
-    the_bet.team_id_bet = params.fetch("query_team_id_bet")
-    the_bet.opposing_team_id = params.fetch("query_opposing_team_id")
-    the_bet.likes_count = params.fetch("query_likes_count")
+    the_bet.owner_id = session[:user_id]
+
+    team = FootballTeam.where( :team_name => the_bet.team_bet).at(0)
+    the_bet.team_id_bet = team.id
+
+    oppTeam = FootballTeam.where( :team_name => the_bet.opposing_team).at(0)
+    the_bet.opposing_team_id = oppTeam.id
+
+    #the_bet.team_id_bet = params.fetch("query_team_id_bet")
+    #the_bet.opposing_team_id = params.fetch("query_opposing_team_id")
+    the_bet.likes_count = 0
+
+    if the_bet.win_loss == "Loss"
+      the_bet.money_won_lost = -the_bet.wager
+    end
+    if the_bet.win_loss == "Pending"
+      the_bet.money_won_lost = 0
+    end
+    if the_bet.win_loss == "Win"
+      if the_bet.favorite_or_underdog == "Underdog"
+        the_bet.money_won_lost = (the_bet.wager * (the_bet.odds / 100)) + the_bet.wager
+      else
+        the_bet.money_won_lost = ((100 / the_bet.odds) * the_bet.wager) + the_bet.wager
+      end
+    end
+
+
+    #the_bet.money_won_lost = 0 #params.fetch("query_money_won_lost")
 
     if the_bet.valid?
       the_bet.save
+
+      the_user = User.where({ :id => session[:user_id]}).at(0)
+      the_user.total_balance = the_user.total_balance + the_bet.money_won_lost
+            
       redirect_to("/bets", { :notice => "Bet created successfully." })
     else
       redirect_to("/bets", { :notice => "Bet failed to create successfully." })
