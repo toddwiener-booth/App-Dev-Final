@@ -1,6 +1,14 @@
 class BetsController < ApplicationController
   def homepage
 
+    the_id = session[:user_id]
+    @users_bets = Bet.where({ :owner_id => the_id })
+    @balance = 0
+
+    #@user_bets.each do |bet|
+    #  @balance = balance + bet.money_won_lost
+    #end
+
 
 
     render({ :template => "bets/homepage.html.erb"})
@@ -70,8 +78,8 @@ class BetsController < ApplicationController
     if the_bet.valid?
       the_bet.save
 
-      the_user = User.where({ :id => session[:user_id]}).at(0)
-      the_user.total_balance = the_user.total_balance + the_bet.money_won_lost
+      #the_user = User.where({ :id => session[:user_id]}).at(0)
+      #the_user.total_balance = the_user.total_balance + the_bet.money_won_lost
             
       redirect_to("/bets", { :notice => "Bet created successfully." })
     else
