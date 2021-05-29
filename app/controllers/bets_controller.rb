@@ -27,7 +27,7 @@ class BetsController < ApplicationController
 
     #@all_users = User.all.order({ :money_won_lost => desc})
 
-    @all_users = User.all.sort_by(&:total_balance)
+    @all_users = User.all.sort_by(&:total_balance).reverse()
 
     @balance = 0
     @total_wagers = 0
