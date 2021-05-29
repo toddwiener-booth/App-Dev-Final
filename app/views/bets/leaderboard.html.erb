@@ -2,7 +2,8 @@
 
 <div>
   <div>
-    <table>
+    <table class="table">
+    <thead class="thead-dark">
       <tr>
         <th>
           Username
@@ -25,17 +26,21 @@
         <th>
           ROI
         </th>
-        <th>
-          Best Odds Win
-        </th>
       </tr>
+      </thead>
 
       <% @all_users.each do |user| %>
         <% users_bets = Bet.where({ :owner_id => user.id }) %>
+        <% @win_counter = 0 %>
+        <% @loss_counter = 0 %>
       <% if users_bets != nil %>
         <% users_bets.each do |bet| %>
           <% @balance = @balance + bet.money_won_lost %>
+          
           <% @total_wagers = @total_wagers + bet.wager %>
+          <% if bet.win_loss == "Pending" %>
+            <% @pending_wagers = @pending_wagers + bet.wager %>
+          <% end %>
 
           <% if bet.win_loss == "Loss" %>
             <% @loss_counter = @loss_counter + 1 %>
@@ -45,18 +50,23 @@
           <% end %>
 
         <% end %>
+      <% end %>
 
-          <% if @balance > 0 %>
+          <!--<% if @balance > 0 %>
             <%  @money_won_or_lost = @balance - @total_wagers %>
           <% else %>
             <%  @money_won_or_lost = @balance %>
-          <% end %>
+          <% end %>-->
+
           <% if @total_wagers > 0 %>
-            <% @roi = @money_won_or_lost / @total_wagers %>
+            <% @roi = user.total_balance / (@total_wagers - @pending_wagers) %>
           <% end %>
-      <% end %>
       
-        <tr>
+        <% if user.total_balance < 0 %> 
+        <tr class="table-danger">
+        <% else %>
+        <tr class="table-success">
+        <% end %>
         <td>
           <%= user.username %>
         </td>
@@ -70,19 +80,19 @@
           <%= @loss_counter %>
         </td>
         <td>
-          <% if user.bets_count != 0 %>
-          <%= @win_counter / user.bets_count * 100 %>%
+          <% if (@win_counter + @loss_counter) != 0 %>
+          <% @win_percent = (@win_counter.to_f / (@win_counter.to_f + @loss_counter.to_f)) * 100 %>
+          <%= @win_percent.round(2) %>%
           <% else %>
           <%= 100 %>%
           <% end %>
         </td>
-        
-        
+      
         <td>
-          <%= @roi %>
+          <%= number_to_currency(user.total_balance) %>
         </td>
         <td>
-          xx
+          <%= (@roi * 100).round(2) %>%
         </td>
       </tr>
 
@@ -90,6 +100,12 @@
     </table>
   </div>
 </div>
+
+<br>
+<br>
+<br>
+<br>
+<br>
 
 <div>
   <h3> Best Bet </h3>

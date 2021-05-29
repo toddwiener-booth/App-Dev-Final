@@ -145,7 +145,7 @@
 <hr>
 <div>
   <div>
-    <table>
+    <table class="table">
       <tr>
         <!--<th>
           ID
@@ -217,11 +217,15 @@
         </td>
 
         <td>
-          <%= a_bet.odds %>
+          <% if a_bet.favorite_or_underdog == "Favorite" %>
+           -<%= a_bet.odds.round(0)%>
+          <% else %>
+           +<%= a_bet.odds.round(0)%>
+           <% end %>
         </td>
 
         <td>
-          <%= a_bet.wager %>
+          <%= number_to_currency(a_bet.wager) %>
         </td>
 
         <td>
@@ -241,7 +245,7 @@
         </td>
 
         <td>
-          <%= a_bet.money_won_lost %>
+          <%= number_to_currency(a_bet.money_won_lost) %>
         </td>
 
         <!--<td>

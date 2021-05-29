@@ -1,10 +1,16 @@
-<h1>Welcome to Bet with Friends!</h1>
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">Welcome to Bet Tracker!</h1>
+    <p class="lead">The only site where you can track your bets and compare your betting performance.</p>
+  </div>
+</div>
 
 <!-- <%= @user_bets %> -->
 
 <br>
 
-<h3>Your total Win/Loss to date is <%= @money_won_or_lost %> on <%= @total_wagers %> of money bet.</h3>
+<% if session[:user_id] != nil %>
+<h3>Your total Win/Loss to date is <%= number_to_currency(@the_user.total_balance) %> on <%= number_to_currency(@total_wagers) %> of money bet.</h3>
 
 <br>
 <br>
@@ -14,4 +20,5 @@
   <h4> You're not very good at this... maybe take a week off and call 1-800-GAMBLER </h4>
 <% else %>
   <h4> Your picks are hot! Keep the bets coming! </h4>
+<% end %>
 <% end %>

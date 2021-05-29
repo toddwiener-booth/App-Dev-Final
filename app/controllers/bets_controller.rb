@@ -2,7 +2,9 @@ class BetsController < ApplicationController
   def homepage
 
     the_id = session[:user_id]
+    @the_user = User.where({ :id => session[:user_id] }).at(0)
     users_bets = Bet.where({ :owner_id => the_id })
+
     @balance = 0
     @total_wagers = 0
 
@@ -23,12 +25,15 @@ class BetsController < ApplicationController
 
   def leaderboard
 
-    @all_users = User.all
+    #@all_users = User.all.order({ :money_won_lost => desc})
+
+    @all_users = User.all.sort_by(&:total_balance)
 
     @balance = 0
     @total_wagers = 0
-    @loss_counter = 0
-    @win_counter = 0
+    @pending_wagers = 0
+    #@loss_counter = 0
+    #@win_counter = 0
     @roi = 0
 
     render({ :template => "bets/leaderboard.html.erb"})
@@ -70,6 +75,7 @@ class BetsController < ApplicationController
     the_bet.odds = params.fetch("query_odds")
     the_bet.wager = params.fetch("query_wager")
     the_bet.owner_id = session[:user_id]
+    outcome = params.fetch("query_win_loss")
 
     team = FootballTeam.where( :team_name => the_bet.team_bet).at(0)
     the_bet.team_id_bet = team.id
@@ -80,6 +86,60 @@ class BetsController < ApplicationController
     #the_bet.team_id_bet = params.fetch("query_team_id_bet")
     #the_bet.opposing_team_id = params.fetch("query_opposing_team_id")
     the_bet.likes_count = 0
+
+    if outcome == "Loss"
+      the_bet.money_won_lost = -the_bet.wager
+    elsif outcome == "Pending"
+      the_bet.money_won_lost = 0
+    else
+      #if the_bet.win_loss == "Win"
+        if the_bet.favorite_or_underdog == "Underdog"
+          the_bet.money_won_lost = (the_bet.wager * (the_bet.odds / 100)) + the_bet.wager
+        else
+          the_bet.money_won_lost = ((100 / the_bet.odds) * the_bet.wager) + the_bet.wager
+        end
+    end
+
+
+    #the_bet.money_won_lost = 0 #params.fetch("query_money_won_lost")
+
+    if the_bet.valid?
+
+
+      the_user = User.where({ :id => session[:user_id]}).at(0)
+      the_user.bets_count = the_user.bets_count + 1
+      if outcome == "Win"
+        the_user.total_balance = the_user.total_balance + the_bet.money_won_lost - the_bet.wager
+      else
+        the_user.total_balance = the_user.total_balance + the_bet.money_won_lost
+      end
+
+      the_user.save
+      the_bet.save
+            
+      redirect_to("/bets", { :notice => "Bet created successfully." + "w/l: " + outcome + "balance: " + the_user.total_balance.to_s + "th_bet.money_won_lost: " +  the_bet.money_won_lost.to_s})
+    else
+      redirect_to("/bets", { :notice => "Bet failed to create successfully." })
+    end
+  end
+
+  def update
+    the_id = params.fetch("path_id")
+    the_bet = Bet.where({ :id => the_id }).at(0)
+
+    old_money_won_lost = the_bet.money_won_lost
+
+    the_bet.team_bet = params.fetch("query_team_bet")
+    the_bet.favorite_or_underdog = params.fetch("query_favorite_or_underdog")
+    the_bet.opposing_team = params.fetch("query_opposing_team")
+    the_bet.win_loss = params.fetch("query_win_loss")
+    the_bet.odds = params.fetch("query_odds")
+    the_bet.wager = params.fetch("query_wager")
+    the_bet.owner_id = params.fetch("query_owner_id")
+    the_bet.money_won_lost = params.fetch("query_money_won_lost")
+    the_bet.team_id_bet = params.fetch("query_team_id_bet")
+    the_bet.opposing_team_id = params.fetch("query_opposing_team_id")
+    the_bet.likes_count = params.fetch("query_likes_count")
 
     if the_bet.win_loss == "Loss"
       the_bet.money_won_lost = -the_bet.wager
@@ -95,40 +155,18 @@ class BetsController < ApplicationController
       end
     end
 
-
-    #the_bet.money_won_lost = 0 #params.fetch("query_money_won_lost")
-
     if the_bet.valid?
       the_bet.save
 
       the_user = User.where({ :id => session[:user_id]}).at(0)
       the_user.bets_count = the_user.bets_count + 1
+      if the_bet.win_loss == "Win"
+        the_user.total_balance = the_user.total_balance - old_money_won_lost + the_bet.money_won_lost - the_bet.wager
+      else
+        the_user.total_balance = the_user.total_balance - old_money_won_lost + the_bet.money_won_lost
+      end
       the_user.save
-            
-      redirect_to("/bets", { :notice => "Bet created successfully." })
-    else
-      redirect_to("/bets", { :notice => "Bet failed to create successfully." })
-    end
-  end
 
-  def update
-    the_id = params.fetch("path_id")
-    the_bet = Bet.where({ :id => the_id }).at(0)
-
-    the_bet.team_bet = params.fetch("query_team_bet")
-    the_bet.favorite_or_underdog = params.fetch("query_favorite_or_underdog")
-    the_bet.opposing_team = params.fetch("query_opposing_team")
-    the_bet.win_loss = params.fetch("query_win_loss")
-    the_bet.odds = params.fetch("query_odds")
-    the_bet.wager = params.fetch("query_wager")
-    the_bet.owner_id = params.fetch("query_owner_id")
-    the_bet.money_won_lost = params.fetch("query_money_won_lost")
-    the_bet.team_id_bet = params.fetch("query_team_id_bet")
-    the_bet.opposing_team_id = params.fetch("query_opposing_team_id")
-    the_bet.likes_count = params.fetch("query_likes_count")
-
-    if the_bet.valid?
-      the_bet.save
       redirect_to("/bets/#{the_bet.id}", { :notice => "Bet updated successfully."} )
     else
       redirect_to("/bets/#{the_bet.id}", { :alert => "Bet failed to update successfully." })
@@ -138,6 +176,7 @@ class BetsController < ApplicationController
   def update_outcome
     the_id = params.fetch("path_id")
     the_bet = Bet.where({ :id => the_id }).at(0)
+    old_money_won_lost = the_bet.money_won_lost
 
     the_bet.win_loss = params.fetch("outcome")
 
@@ -156,6 +195,16 @@ class BetsController < ApplicationController
     end
 
     the_bet.save
+
+    the_user = User.where({ :id => session[:user_id]}).at(0)
+      if the_bet.win_loss == "Win"
+        the_user.total_balance = the_user.total_balance - old_money_won_lost + the_bet.money_won_lost - the_bet.wager
+      else
+        the_user.total_balance = the_user.total_balance - old_money_won_lost + the_bet.money_won_lost
+      end
+    the_user.save
+
+
     redirect_to("/bets/", { :notice => "Bet updated successfully."} )
 
   end
@@ -163,8 +212,14 @@ class BetsController < ApplicationController
   def destroy
     the_id = params.fetch("path_id")
     the_bet = Bet.where({ :id => the_id }).at(0)
+    old_money_won_lost = the_bet.money_won_lost
 
     the_bet.destroy
+
+    the_user = User.where({ :id => session[:user_id]}).at(0)
+    the_user.bets_count = the_user.bets_count - 1
+    the_user.total_balance = the_user.total_balance - old_money_won_lost
+    the_user.save
 
     redirect_to("/bets", { :notice => "Bet deleted successfully."} )
   end
