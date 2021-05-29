@@ -139,6 +139,31 @@ class BetsController < ApplicationController
     end
   end
 
+  def update_outcome
+    the_id = params.fetch("path_id")
+    the_bet = Bet.where({ :id => the_id }).at(0)
+
+    the_bet.win_loss = params.fetch("outcome")
+
+    if the_bet.win_loss == "Loss"
+      the_bet.money_won_lost = -the_bet.wager
+    end
+    if the_bet.win_loss == "Pending"
+      the_bet.money_won_lost = 0
+    end
+    if the_bet.win_loss == "Win"
+      if the_bet.favorite_or_underdog == "Underdog"
+        the_bet.money_won_lost = (the_bet.wager * (the_bet.odds / 100)) + the_bet.wager
+      else
+        the_bet.money_won_lost = ((100 / the_bet.odds) * the_bet.wager) + the_bet.wager
+      end
+    end
+
+    the_bet.save
+    redirect_to("/bets/", { :notice => "Bet updated successfully."} )
+
+  end
+
   def destroy
     the_id = params.fetch("path_id")
     the_bet = Bet.where({ :id => the_id }).at(0)

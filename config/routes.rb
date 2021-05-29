@@ -38,6 +38,8 @@ Rails.application.routes.draw do
   # UPDATE
   
   post("/modify_bet/:path_id", { :controller => "bets", :action => "update" })
+
+  get("/modify_bet_outcome/:path_id/:outcome", { :controller => "bets", :action => "update_outcome" })
   
   # DELETE
   get("/delete_bet/:path_id", { :controller => "bets", :action => "destroy" })

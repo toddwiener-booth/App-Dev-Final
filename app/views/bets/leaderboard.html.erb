@@ -1,0 +1,145 @@
+<h1> Bet Leaderboard! </h1>
+
+<div>
+  <div>
+    <table>
+      <tr>
+        <!--<th>
+          ID
+        </th>-->
+
+        <th>
+          Team Bet
+        </th>
+
+        <th>
+          Favorite/Underdog
+        </th>
+
+        <th>
+          Opposing Team
+        </th>
+
+        <th>
+          Odds
+        </th>
+
+        <th>
+          Wager
+        </th>
+
+        <th>
+          Outcome
+        </th>
+
+        <th>
+          Money Won/Lost
+        </th>
+
+        <!--<th>
+          Likes count
+        </th>-->
+
+        <th>
+          Created
+        </th>
+
+        <!--<th>
+          Updated At
+        </th>-->
+
+        <th>
+        </th>
+
+        <th>
+        </th>
+      </tr>
+
+      <% @list_of_bets.each do |a_bet| %>
+      <tr>
+        <!--<td>
+          <%= a_bet.id %>
+        </td>-->
+
+        <td>
+          <%= a_bet.team_bet %>
+        </td>
+
+        <td>
+          <%= a_bet.favorite_or_underdog %>
+        </td>
+
+        <td>
+          <%= a_bet.opposing_team %>
+        </td>
+
+        <td>
+          <%= a_bet.odds %>
+        </td>
+
+        <td>
+          <%= a_bet.wager %>
+        </td>
+
+        <td>
+            <div class="dropdown">
+            <button <% if a_bet.win_loss == "Loss" %> class="btn btn-danger dropdown-toggle" <% end %>
+                    <% if a_bet.win_loss == "Win" %>  class="btn btn-success dropdown-toggle" <% end %>
+                    <% if a_bet.win_loss == "Pending" %>  class="btn btn-secondary dropdown-toggle" <% end %>
+            type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <%= a_bet.win_loss %>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" href="/modify_bet_outcome/<%= a_bet.id %>/Win">Win</a>
+              <a class="dropdown-item" href="/modify_bet_outcome/<%= a_bet.id %>/Loss">Loss</a>
+              <a class="dropdown-item" href="/modify_bet_outcome/<%= a_bet.id %>/Pending">Pending</a>
+            </div>
+          </div>
+        </td>
+
+        <td>
+          <%= a_bet.money_won_lost %>
+        </td>
+
+        <!--<td>
+          <%= a_bet.likes_count %>
+        </td>-->
+
+        <td>
+          <%= time_ago_in_words(a_bet.created_at) %> ago
+        </td>
+        <!--<td>
+          <%= time_ago_in_words(a_bet.updated_at) %> ago
+        </td>-->
+
+        <!--<td>
+          <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-outline-success">
+              <input type="radio" name="options" id="option1" autocomplete="off" checked> Win
+            </label>
+            <label class="btn btn-outline-danger">
+              <input type="radio" name="options" id="option2" autocomplete="off"> Loss
+            </label>
+            <label class="btn btn-outline-secondary">
+              <input type="radio" name="options" id="option3" autocomplete="off"> Pending
+            </label>
+          </div>
+        </td>-->
+
+        <td>
+          <a class="alert alert-info" href="/bets/<%= a_bet.id %>">
+            <i class="bi bi-pencil-square"></i>
+          </a>
+        </td>
+
+        <td>
+          <a class="alert alert-danger" href="/delete_bet/<%= a_bet.id %>">
+            <i class="bi bi-trash">
+            </i>
+          </a>
+        </td>
+      </tr>
+      <% end %>
+    </table>
+  </div>
+</div>

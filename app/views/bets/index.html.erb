@@ -192,10 +192,6 @@
         </th>-->
 
         <th>
-          Update Outcome
-        </th>
-
-        <th>
         </th>
 
         <th>
@@ -229,7 +225,19 @@
         </td>
 
         <td>
-          <%= a_bet.win_loss %>
+            <div class="dropdown">
+            <button <% if a_bet.win_loss == "Loss" %> class="btn btn-danger dropdown-toggle" <% end %>
+                    <% if a_bet.win_loss == "Win" %>  class="btn btn-success dropdown-toggle" <% end %>
+                    <% if a_bet.win_loss == "Pending" %>  class="btn btn-secondary dropdown-toggle" <% end %>
+            type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <%= a_bet.win_loss %>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" href="/modify_bet_outcome/<%= a_bet.id %>/Win">Win</a>
+              <a class="dropdown-item" href="/modify_bet_outcome/<%= a_bet.id %>/Loss">Loss</a>
+              <a class="dropdown-item" href="/modify_bet_outcome/<%= a_bet.id %>/Pending">Pending</a>
+            </div>
+          </div>
         </td>
 
         <td>
@@ -247,19 +255,6 @@
           <%= time_ago_in_words(a_bet.updated_at) %> ago
         </td>-->
 
-        <td>
-            <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <%= a_bet.win_loss %>
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <a class="dropdown-item" href="#">Win</a>
-              <a class="dropdown-item" href="#">Loss</a>
-              <a class="dropdown-item" href="#">Pending</a>
-            </div>
-          </div>
-        </td>
-
         <!--<td>
           <div class="btn-group btn-group-toggle" data-toggle="buttons">
             <label class="btn btn-outline-success">
@@ -275,14 +270,15 @@
         </td>-->
 
         <td>
-          <a href="/bets/<%= a_bet.id %>">
-            Edit Bet
+          <a class="alert alert-info" href="/bets/<%= a_bet.id %>">
+            <i class="bi bi-pencil-square"></i>
           </a>
         </td>
 
         <td>
-          <a href="/delete_bet/<%= a_bet.id %>">
-            Delete Bet
+          <a class="alert alert-danger" href="/delete_bet/<%= a_bet.id %>">
+            <i class="bi bi-trash">
+            </i>
           </a>
         </td>
       </tr>
