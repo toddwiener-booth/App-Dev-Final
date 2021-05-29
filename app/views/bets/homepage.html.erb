@@ -1,5 +1,11 @@
 <h1>Welcome to Bet with Friends!</h1>
 
-<%= @user_bets %>
+<!-- <%= @user_bets %> -->
 
-<!--<h3>Your total Win/Loss to date is <%= @balance %></h3>-->
+<h3>Your total Win/Loss to date is <%= @money_won_or_lost %> on <%= @total_wagers %> of money bet.</h3>
+
+<% if @money_won_or_lost <= 0 %>
+  <h3> You're not very good at this... maybe take a week off </h3>
+<% else %>
+  <h3> Your picks are hot! Keep the bets coming! </h3>
+<% end %>

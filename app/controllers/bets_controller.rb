@@ -2,20 +2,48 @@ class BetsController < ApplicationController
   def homepage
 
     the_id = session[:user_id]
-    @users_bets = Bet.where({ :owner_id => the_id })
+    users_bets = Bet.where({ :owner_id => the_id })
     @balance = 0
+    @total_wagers = 0
 
-    #@user_bets.each do |bet|
-    #  @balance = balance + bet.money_won_lost
-    #end
+    users_bets.each do |bet|
+      @balance = @balance + bet.money_won_lost
+      @total_wagers = @total_wagers + bet.wager
+    end
 
-
+    @money_won_or_lost = @total_wagers - @balance - @total_wagers
 
     render({ :template => "bets/homepage.html.erb"})
   end
+
+  def leaderboard
+
+    all_users = User.all
+
+    all_users.each do |user|
+        
+      the_id = user.id
+      users_bets = Bet.where({ :owner_id => the_id })
+      @balance = 0
+      @total_wagers = 0
+
+      users_bets.each do |bet|
+        @balance = @balance + bet.money_won_lost
+        @total_wagers = @total_wagers + bet.wager
+      end
+
+      @money_won_or_lost = @total_wagers - @balance - @total_wagers
+
+    end 
+
+    render({ :template => "bets/leaderboard.html.erb"})
+  end
+
   
   def index
-    matching_bets = Bet.all
+    #matching_bets = Bet.all
+    the_id = session[:user_id]
+    matching_bets = Bet.where({ :owner_id => the_id })
 
     @list_of_bets = matching_bets.order({ :created_at => :desc })
 

@@ -3,6 +3,8 @@ Rails.application.routes.draw do
 
   get("/", { :controller => "bets", :action => "homepage"})
 
+  get("/leaderboard", { :controller => "bets", :action => "leaderboard"})
+
 
   # Routes for the Like resource:
 
