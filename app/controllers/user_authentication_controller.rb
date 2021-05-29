@@ -48,6 +48,7 @@ class UserAuthenticationController < ApplicationController
     @user.password_confirmation = params.fetch("query_password_confirmation")
     @user.favorite_team = params.fetch("query_favorite_team")
     @user.default_bet = params.fetch("query_default_bet")
+    @user.username = params.fetch("query_username")
     @user.total_balance = 0
     @user.bets_count = 0
 

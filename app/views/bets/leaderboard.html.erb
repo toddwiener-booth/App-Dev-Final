@@ -4,142 +4,93 @@
   <div>
     <table>
       <tr>
-        <!--<th>
-          ID
-        </th>-->
-
         <th>
-          Team Bet
+          Username
         </th>
-
         <th>
-          Favorite/Underdog
+          Total Bets
         </th>
-
         <th>
-          Opposing Team
+          Wins
         </th>
-
         <th>
-          Odds
+          Losses
         </th>
-
         <th>
-          Wager
+          Win Percent
         </th>
-
-        <th>
-          Outcome
-        </th>
-
         <th>
           Money Won/Lost
         </th>
-
-        <!--<th>
-          Likes count
-        </th>-->
-
         <th>
-          Created
+          ROI
         </th>
-
-        <!--<th>
-          Updated At
-        </th>-->
-
         <th>
-        </th>
-
-        <th>
+          Best Odds Win
         </th>
       </tr>
 
-      <% @list_of_bets.each do |a_bet| %>
-      <tr>
-        <!--<td>
-          <%= a_bet.id %>
-        </td>-->
+      <% @all_users.each do |user| %>
+        <% users_bets = Bet.where({ :owner_id => user.id }) %>
+      <% if users_bets != nil %>
+        <% users_bets.each do |bet| %>
+          <% @balance = @balance + bet.money_won_lost %>
+          <% @total_wagers = @total_wagers + bet.wager %>
 
+          <% if bet.win_loss == "Loss" %>
+            <% @loss_counter = @loss_counter + 1 %>
+          <% end %>
+          <% if bet.win_loss == "Win" %>
+            <% @win_counter = @win_counter + 1 %>
+          <% end %>
+
+        <% end %>
+
+          <% if @balance > 0 %>
+            <%  @money_won_or_lost = @balance - @total_wagers %>
+          <% else %>
+            <%  @money_won_or_lost = @balance %>
+          <% end %>
+          <% if @total_wagers > 0 %>
+            <% @roi = @money_won_or_lost / @total_wagers %>
+          <% end %>
+      <% end %>
+      
+        <tr>
         <td>
-          <%= a_bet.team_bet %>
+          <%= user.username %>
         </td>
-
         <td>
-          <%= a_bet.favorite_or_underdog %>
+          <%= user.bets_count %>
         </td>
-
         <td>
-          <%= a_bet.opposing_team %>
+          <%= @win_counter %>
         </td>
-
         <td>
-          <%= a_bet.odds %>
+          <%= @loss_counter %>
         </td>
-
         <td>
-          <%= a_bet.wager %>
+          <% if user.bets_count != 0 %>
+          <%= @win_counter / user.bets_count * 100 %>%
+          <% else %>
+          <%= 100 %>%
+          <% end %>
         </td>
-
+        
+        
         <td>
-            <div class="dropdown">
-            <button <% if a_bet.win_loss == "Loss" %> class="btn btn-danger dropdown-toggle" <% end %>
-                    <% if a_bet.win_loss == "Win" %>  class="btn btn-success dropdown-toggle" <% end %>
-                    <% if a_bet.win_loss == "Pending" %>  class="btn btn-secondary dropdown-toggle" <% end %>
-            type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <%= a_bet.win_loss %>
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <a class="dropdown-item" href="/modify_bet_outcome/<%= a_bet.id %>/Win">Win</a>
-              <a class="dropdown-item" href="/modify_bet_outcome/<%= a_bet.id %>/Loss">Loss</a>
-              <a class="dropdown-item" href="/modify_bet_outcome/<%= a_bet.id %>/Pending">Pending</a>
-            </div>
-          </div>
+          <%= @roi %>
         </td>
-
         <td>
-          <%= a_bet.money_won_lost %>
-        </td>
-
-        <!--<td>
-          <%= a_bet.likes_count %>
-        </td>-->
-
-        <td>
-          <%= time_ago_in_words(a_bet.created_at) %> ago
-        </td>
-        <!--<td>
-          <%= time_ago_in_words(a_bet.updated_at) %> ago
-        </td>-->
-
-        <!--<td>
-          <div class="btn-group btn-group-toggle" data-toggle="buttons">
-            <label class="btn btn-outline-success">
-              <input type="radio" name="options" id="option1" autocomplete="off" checked> Win
-            </label>
-            <label class="btn btn-outline-danger">
-              <input type="radio" name="options" id="option2" autocomplete="off"> Loss
-            </label>
-            <label class="btn btn-outline-secondary">
-              <input type="radio" name="options" id="option3" autocomplete="off"> Pending
-            </label>
-          </div>
-        </td>-->
-
-        <td>
-          <a class="alert alert-info" href="/bets/<%= a_bet.id %>">
-            <i class="bi bi-pencil-square"></i>
-          </a>
-        </td>
-
-        <td>
-          <a class="alert alert-danger" href="/delete_bet/<%= a_bet.id %>">
-            <i class="bi bi-trash">
-            </i>
-          </a>
+          xx
         </td>
       </tr>
+
       <% end %>
     </table>
   </div>
 </div>
+
+<div>
+  <h3> Best Bet </h3>
+</div

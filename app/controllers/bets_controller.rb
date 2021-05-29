@@ -7,34 +7,29 @@ class BetsController < ApplicationController
     @total_wagers = 0
 
     users_bets.each do |bet|
+      
       @balance = @balance + bet.money_won_lost
       @total_wagers = @total_wagers + bet.wager
     end
+    if @balance > 0 
+      @money_won_or_lost = @balance - @total_wagers
+    else 
+       @money_won_or_lost = @balance
+    end
 
-    @money_won_or_lost = @total_wagers - @balance - @total_wagers
 
     render({ :template => "bets/homepage.html.erb"})
   end
 
   def leaderboard
 
-    all_users = User.all
+    @all_users = User.all
 
-    all_users.each do |user|
-        
-      the_id = user.id
-      users_bets = Bet.where({ :owner_id => the_id })
-      @balance = 0
-      @total_wagers = 0
-
-      users_bets.each do |bet|
-        @balance = @balance + bet.money_won_lost
-        @total_wagers = @total_wagers + bet.wager
-      end
-
-      @money_won_or_lost = @total_wagers - @balance - @total_wagers
-
-    end 
+    @balance = 0
+    @total_wagers = 0
+    @loss_counter = 0
+    @win_counter = 0
+    @roi = 0
 
     render({ :template => "bets/leaderboard.html.erb"})
   end
@@ -106,8 +101,9 @@ class BetsController < ApplicationController
     if the_bet.valid?
       the_bet.save
 
-      #the_user = User.where({ :id => session[:user_id]}).at(0)
-      #the_user.total_balance = the_user.total_balance + the_bet.money_won_lost
+      the_user = User.where({ :id => session[:user_id]}).at(0)
+      the_user.bets_count = the_user.bets_count + 1
+      the_user.save
             
       redirect_to("/bets", { :notice => "Bet created successfully." })
     else
