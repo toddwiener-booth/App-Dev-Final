@@ -33,6 +33,8 @@
         <% users_bets = Bet.where({ :owner_id => user.id }) %>
         <% @win_counter = 0 %>
         <% @loss_counter = 0 %>
+        <% @total_wagers = 0 %>
+        <% @pending_wagers = 0 %>
       <% if users_bets != nil %>
         <% users_bets.each do |bet| %>
           <% @balance = @balance + bet.money_won_lost %>
@@ -58,7 +60,7 @@
             <%  @money_won_or_lost = @balance %>
           <% end %>-->
 
-          <% if @total_wagers > 0 %>
+          <% if (@total_wagers - @pending_wagers) > 0 %>
             <% @roi = user.total_balance / (@total_wagers - @pending_wagers) %>
           <% end %>
       
@@ -95,6 +97,15 @@
           <%= (@roi * 100).round(2) %>%
         </td>
       </tr>
+      <!--<tr>
+        <td>
+          <h2> <%= @total_wagers %></h2>
+          <h2> <%= @pending_wagers %></h2>
+          <h2> <%= user.total_balance %></h2>
+          <h2> <%= (@total_wagers - @pending_wagers) %></h2>
+          <h2> <%= user.total_balance / (@total_wagers - @pending_wagers) %></h2>
+        </td>
+      </tr>-->
 
       <% end %>
     </table>
@@ -108,13 +119,13 @@
 <br>
 
 <div>
-  <h3> Best Bet </h3>
+  <h2> Best Bet </h2>
 </div
 
 <div class="card" style="width: 18rem;">
   <div class="card-body">
-    <h5 class="card-title"><%= #best_bet_username %>></h5>
-    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    <h3 class="card-title">Best Recorded Bet</h3>
+    <h4 class="card-subtitle mb-2 text-muted"><%= @best_bet_user.username %> with a bet on the <%= @best_bet_underdog.team_bet %> at <%= @best_bet_sign %><%= @best_bet_underdog.odds %></h4>
+    <p class="card-text"><%= @best_bet_user.username %> won <%= number_to_currency(@best_bet_underdog.money_won_lost) %> on that game.</p>
   </div>
 </div>

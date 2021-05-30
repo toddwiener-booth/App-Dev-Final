@@ -23,22 +23,6 @@
         </li>
         <% end %>
         <% if session[:user_id] != nil %>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Resources
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <!--<a href="/likes" class="dropdown-item">
-              Likes
-            </a>-->
-            <a href="/bets" class="dropdown-item">
-              Bets
-            </a>
-            <a href="/edit_user_profile" class="dropdown-item">
-              Edit User Profile
-            </a>
-          </div>
-        </li>
         <li class="nav-item">
           <a class="nav-link" href="/bets">
             My Bets
@@ -53,7 +37,8 @@
       <ul class="nav navbar-nav navbar-right">
         <li class="nav-item">
             <a class="nav-link" href="/edit_user_profile">
-              Edit User Profile
+              <% the_user = User.where({ :id => session[:user_id]}).at(0) %>
+              <i class="bi bi-pencil-square"></i> <%= the_user.username %>
             </a>
         </li>
         <li class="nav-item">

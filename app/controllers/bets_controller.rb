@@ -36,6 +36,35 @@ class BetsController < ApplicationController
     #@win_counter = 0
     @roi = 0
 
+    @best_bet_odds_favorite = 1000000
+    @best_bet_odds_underdog = 0
+    @best_bet_sign = "+"
+
+     @all_users.each do |user|
+        users_bets = Bet.where({ :owner_id => user.id })
+      if users_bets != nil
+        users_bets.each do |bet|
+          if bet.win_loss == "Win"
+            if bet.favorite_or_underdog == "Favorite" && bet.odds < @best_bet_odds_favorite
+              @best_bet_odds_favorite = bet.odds
+              @best_bet_favorite = bet
+            elsif bet.favorite_or_underdog == "Underdog" && bet.odds > @best_bet_odds_underdog
+              @best_bet_odds_underdog = bet.odds
+              @best_bet_underdog = bet
+            end
+          end
+        end
+        end
+      end
+
+      if @best_bet_underdog == 0
+        @best_bet_underdog = @best_bet_favorite
+        @best_bet_sign = "-"
+      end
+      
+      @best_bet_user = User.where({ :id => @best_bet_underdog.owner_id }).at(0)
+    
+
     render({ :template => "bets/leaderboard.html.erb"})
   end
 
@@ -62,6 +91,12 @@ class BetsController < ApplicationController
     matching_bets = Bet.where({ :id => the_id })
 
     @the_bet = matching_bets.at(0)
+
+    all_teams = FootballTeam.all
+
+    @list_of_teams = all_teams.order({ :team_name => :asc })
+
+    @user = User.where({ :id => session[:user_id] }).first
 
     render({ :template => "bets/show.html.erb" })
   end
@@ -135,31 +170,33 @@ class BetsController < ApplicationController
     the_bet.win_loss = params.fetch("query_win_loss")
     the_bet.odds = params.fetch("query_odds")
     the_bet.wager = params.fetch("query_wager")
-    the_bet.owner_id = params.fetch("query_owner_id")
-    the_bet.money_won_lost = params.fetch("query_money_won_lost")
-    the_bet.team_id_bet = params.fetch("query_team_id_bet")
-    the_bet.opposing_team_id = params.fetch("query_opposing_team_id")
-    the_bet.likes_count = params.fetch("query_likes_count")
+    the_bet.owner_id = session[:user_id]
+    outcome = params.fetch("query_win_loss")
 
-    if the_bet.win_loss == "Loss"
+    team = FootballTeam.where( :team_name => the_bet.team_bet).at(0)
+    the_bet.team_id_bet = team.id
+
+    oppTeam = FootballTeam.where( :team_name => the_bet.opposing_team).at(0)
+    the_bet.opposing_team_id = oppTeam.id
+
+    if outcome == "Loss"
       the_bet.money_won_lost = -the_bet.wager
-    end
-    if the_bet.win_loss == "Pending"
+    elsif outcome == "Pending"
       the_bet.money_won_lost = 0
-    end
-    if the_bet.win_loss == "Win"
-      if the_bet.favorite_or_underdog == "Underdog"
-        the_bet.money_won_lost = (the_bet.wager * (the_bet.odds / 100)) + the_bet.wager
-      else
-        the_bet.money_won_lost = ((100 / the_bet.odds) * the_bet.wager) + the_bet.wager
-      end
+    else
+      #if the_bet.win_loss == "Win"
+        if the_bet.favorite_or_underdog == "Underdog"
+          the_bet.money_won_lost = (the_bet.wager * (the_bet.odds / 100)) + the_bet.wager
+        else
+          the_bet.money_won_lost = ((100 / the_bet.odds) * the_bet.wager) + the_bet.wager
+        end
     end
 
     if the_bet.valid?
       the_bet.save
 
       the_user = User.where({ :id => session[:user_id]}).at(0)
-      the_user.bets_count = the_user.bets_count + 1
+      #the_user.bets_count = the_user.bets_count + 1
       if the_bet.win_loss == "Win"
         the_user.total_balance = the_user.total_balance - old_money_won_lost + the_bet.money_won_lost - the_bet.wager
       else
