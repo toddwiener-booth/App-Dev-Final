@@ -214,6 +214,7 @@ class BetsController < ApplicationController
     the_id = params.fetch("path_id")
     the_bet = Bet.where({ :id => the_id }).at(0)
     old_money_won_lost = the_bet.money_won_lost
+    old_outcome = the_bet.win_loss
 
     the_bet.win_loss = params.fetch("outcome")
 

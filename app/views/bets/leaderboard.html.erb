@@ -62,6 +62,8 @@
 
           <% if (@total_wagers - @pending_wagers) > 0 %>
             <% @roi = user.total_balance / (@total_wagers - @pending_wagers) %>
+          <% else %>
+            <% @roi = 0 %>
           <% end %>
       
         <% if user.total_balance < 0 %> 
