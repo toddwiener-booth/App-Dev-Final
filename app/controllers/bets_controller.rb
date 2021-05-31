@@ -262,7 +262,7 @@ class BetsController < ApplicationController
     the_user.save
 
 
-    redirect_to("/bets/", { :notice => "Bet updated successfully." + "old money: " + old_money_won_lost.to_s + "money won lost: " + the_bet.money_won_lost.to_s + "wager: " + the_bet.wager.to_s} )
+    redirect_to("/bets/", { :notice => "Bet updated successfully." } )
 
   end
 
