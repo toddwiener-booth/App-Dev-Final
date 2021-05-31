@@ -124,6 +124,7 @@
   <h2> Best Bet </h2>
 </div
 
+<% if Bet.all != nil %>
 <div class="card" style="width: 18rem;">
   <div class="card-body">
     <h3 class="card-title">Best Recorded Bet</h3>
@@ -131,3 +132,4 @@
     <p class="card-text"><%= @best_bet_user.username %> won <%= number_to_currency(@best_bet_underdog.money_won_lost) %> on that game.</p>
   </div>
 </div>
+<% end %>

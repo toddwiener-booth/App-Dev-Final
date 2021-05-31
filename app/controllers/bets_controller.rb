@@ -39,6 +39,12 @@ class BetsController < ApplicationController
     @best_bet_odds_favorite = 1000000
     @best_bet_odds_underdog = 0
     @best_bet_sign = "+"
+    
+    if Bet.all != nil
+      @best_bet_underdog = Bet.all.first
+      @best_bet_favorite = Bet.all.first
+    end
+    
 
      @all_users.each do |user|
         users_bets = Bet.where({ :owner_id => user.id })
@@ -57,12 +63,14 @@ class BetsController < ApplicationController
         end
       end
 
-      if @best_bet_underdog == 0
+      if @best_bet_odds_underdog == 0
         @best_bet_underdog = @best_bet_favorite
         @best_bet_sign = "-"
       end
       
-      @best_bet_user = User.where({ :id => @best_bet_underdog.owner_id }).at(0)
+      if Bet.all != nil
+        @best_bet_user = User.where({ :id => @best_bet_underdog.owner_id }).at(0)
+      end
     
 
     render({ :template => "bets/leaderboard.html.erb"})
