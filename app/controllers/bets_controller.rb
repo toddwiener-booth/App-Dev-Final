@@ -45,7 +45,7 @@ class BetsController < ApplicationController
       @best_bet_favorite = Bet.all.first
     end
     
-
+    if Bet.all != nil
      @all_users.each do |user|
         users_bets = Bet.where({ :owner_id => user.id })
       if users_bets != nil
@@ -62,6 +62,7 @@ class BetsController < ApplicationController
         end
         end
       end
+    end
 
       if @best_bet_odds_underdog == 0
         @best_bet_underdog = @best_bet_favorite
