@@ -10,8 +10,23 @@
         <input id="email_box" name="query_email" value="<%= @current_user.email %>">
       </div>
       <div>
-        <label for="favorite_team_box">Favorite team</label>
-        <input id="favorite_team_box" name="query_favorite_team" value="<%= @current_user.favorite_team %>">
+        <label for="query_favorite_team">Favorite team</label>
+
+        <select name="query_favorite_team" id="query_favorite_team">
+
+          <% @list_of_teams.each do |team| %>
+          <% if team.team_name == @user.favorite_team %>
+          <option value="<%= team.team_name %>" selected>
+              <%= team.team_name %>
+          </option>
+          <% end %>
+          <% if team.team_name != @user.favorite_team %>
+          <option value="<%= team.team_name %>">
+              <%= team.team_name %>
+          </option>
+          <% end %>
+        <% end %>
+        </select>
       </div>
       <div>
         <label for="default_bet_box">Default bet</label>

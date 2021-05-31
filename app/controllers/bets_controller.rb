@@ -152,7 +152,7 @@ class BetsController < ApplicationController
       the_user.save
       the_bet.save
             
-      redirect_to("/bets", { :notice => "Bet created successfully." + "w/l: " + outcome + "balance: " + the_user.total_balance.to_s + "th_bet.money_won_lost: " +  the_bet.money_won_lost.to_s})
+      redirect_to("/bets", { :notice => "Bet created successfully."})
     else
       redirect_to("/bets", { :notice => "Bet failed to create successfully." })
     end
@@ -196,7 +196,7 @@ class BetsController < ApplicationController
       end
     end
 
-    #if the_bet.valid?
+    if the_bet.valid?
       the_bet.save
 
       the_user = User.where({ :id => session[:user_id]}).at(0)
@@ -215,10 +215,10 @@ class BetsController < ApplicationController
       the_user.save
 
       redirect_to("/bets/#{the_bet.id}", { :notice => "Bet updated successfully."} )
-    #else
-    #  redirect_to("/bets/#{the_bet.id}", { :alert => "Bet failed to update successfully." })
+    else
+      redirect_to("/bets/#{the_bet.id}", { :alert => "Bet failed to update successfully." })
     
-    #end
+    end
   end
 
   def update_outcome

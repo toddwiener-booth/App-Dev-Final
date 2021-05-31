@@ -64,6 +64,12 @@ class UserAuthenticationController < ApplicationController
   end
     
   def edit_profile_form
+    all_teams = FootballTeam.all
+
+    @list_of_teams = all_teams.order({ :team_name => :asc })
+
+    @user = User.where({ :id => session[:user_id] }).first
+    
     render({ :template => "user_authentication/edit_profile.html.erb" })
   end
 
@@ -74,8 +80,6 @@ class UserAuthenticationController < ApplicationController
     @user.password_confirmation = params.fetch("query_password_confirmation")
     @user.favorite_team = params.fetch("query_favorite_team")
     @user.default_bet = params.fetch("query_default_bet")
-    @user.total_balance = params.fetch("query_total_balance")
-    @user.bets_count = params.fetch("query_bets_count")
     
     if @user.valid?
       @user.save
